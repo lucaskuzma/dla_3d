@@ -35,10 +35,9 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::updateSim(){
     // spawn a point
-    float radius = boundingRadius + SPAWN_DISTANCE;
-    if (moving.getNumVertices() < radius * radius * radius * GROWTH_FACTOR) {
+    float spawnRadius = boundingRadius + SPAWN_DISTANCE;
+    if (moving.getNumVertices() < spawnRadius * spawnRadius * spawnRadius * GROWTH_FACTOR) {
         ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
-        p.limit(radius);
         moving.addVertex(p);
     }
 
@@ -47,6 +46,7 @@ void ofApp::updateSim(){
     for (int i=0; i<movingVerts; ++i) {
         ofVec3f v = moving.getVertex(i);
         v += ofVec3f(ofRandom(-STEP, STEP), ofRandom(-STEP, STEP), ofRandom(-STEP, STEP));
+        v.limit(spawnRadius);
         moving.setVertex(i, v);
         
         // find near points
