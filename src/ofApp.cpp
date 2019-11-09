@@ -1,11 +1,12 @@
 #include "ofApp.h"
 
 #define SIZE 4096   // make this always bigger than bounding sphere
-#define STEP 0.1    // wiggle step
-#define FREEZE_THRESHOLD 2 // how close points have to be to freeze
+#define STEP 0.9    // wiggle step
+#define FREEZE_THRESHOLD 4 // how close points have to be to freeze
 #define SPAWN_DISTANCE 2   // how far from bounding sphere surface we spawn
 #define GROWTH_FACTOR 0.01 // how many wiggly points to aim for, given sphere volume
-#define SIM_SPEED 100       // how many sim steps per frame
+#define MAX_MOVING 100     // how many moving particles at most
+#define SIM_SPEED 200      // how many sim steps per frame
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -17,17 +18,20 @@ void ofApp::setup(){
 
     ofVec3f p(0, 0, 0);
     frozen.addVertex(p);
-    frozen.addColor(ofFloatColor(1.0, 0.0, 0.0));
+    frozen.addColor(ofFloatColor(1.0, 1.0, 1.0));
     boundingRadius = 0;
+    
+    runSim = true;
 
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(1);
+    glPointSize(2);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    for (int i=0; i<SIM_SPEED; i++){
+    // update multiple time steps per frame
+    for (int i=0; i<SIM_SPEED && runSim; i++){
         this->updateSim();
     }
 }
@@ -36,9 +40,11 @@ void ofApp::update(){
 void ofApp::updateSim(){
     // spawn a point
     float spawnRadius = boundingRadius + SPAWN_DISTANCE;
-    if (moving.getNumVertices() < spawnRadius * spawnRadius * spawnRadius * GROWTH_FACTOR) {
+    if (moving.getNumVertices() < spawnRadius * spawnRadius * spawnRadius * GROWTH_FACTOR
+        && moving.getNumVertices() < MAX_MOVING) {
         ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
         moving.addVertex(p);
+        moving.addColor(ofFloatColor(0.3, 0.3, 0.3));
     }
 
     // wiggle
@@ -53,8 +59,9 @@ void ofApp::updateSim(){
         int frozenVerts = frozen.getNumVertices();
         for (int j=0; j<frozenVerts; ++j) {
             ofVec3f f = frozen.getVertex(j);
-            if (f.distance(v) < FREEZE_THRESHOLD) {
+            if (f.squareDistance(v) < FREEZE_THRESHOLD) {
                 freezeList.push_back(i);
+                break;
             }
         }
     }
@@ -67,7 +74,7 @@ void ofApp::updateSim(){
         ofVec3f v = moving.getVertex(i);
         moving.removeVertex(i);
         frozen.addVertex(v);
-        frozen.addColor(ofFloatColor(1.0, 0.0, 0.0));
+        frozen.addColor(ofFloatColor(1.0, 1.0, 1.0));
         freezeList.pop_back();
         
         // adjust bounds
@@ -91,7 +98,12 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if (key == ' '){
+        runSim = !runSim;
+    }
+    if (key == 's') {
+        frozen.save("mesh.ply");
+    }
 }
 
 //--------------------------------------------------------------

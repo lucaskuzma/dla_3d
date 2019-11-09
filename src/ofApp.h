@@ -11,6 +11,8 @@ class ofApp : public ofBaseApp{
     vector<int> freezeList;
     float boundingRadius;
     
+    bool runSim;
+    
 	public:
 		void setup();
 		void update();
