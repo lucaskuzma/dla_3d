@@ -23,6 +23,7 @@ void ofApp::update(){
     // spawn a point
     ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
     moving.push_back(p);
+    mesh.addVertex(p);
     
     //
     int numVerts = mesh.getNumVertices();
