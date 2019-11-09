@@ -1,9 +1,10 @@
 #include "ofApp.h"
 
-#define SIZE 128
-#define STEP .1
-#define FREEZE_THRESHOLD 10
-#define SPAWN_DISTANCE 10
+#define SIZE 4096   // make this always bigger than bounding sphere
+#define STEP 0.1    // wiggle step
+#define FREEZE_THRESHOLD 10 // how close points have to be to freeze
+#define SPAWN_DISTANCE 10   // how far from bounding sphere surface we spawn
+#define GROWTH_FACTOR 0.001 // how many wiggly points to aim for, given sphere volume
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -20,16 +21,19 @@ void ofApp::setup(){
 
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(1);
+    glPointSize(3);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     // spawn a point
-    ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
-    p.limit(boundingRadius + SPAWN_DISTANCE);
-    moving.addVertex(p);
-    
+    float radius = boundingRadius + SPAWN_DISTANCE;
+    if (moving.getNumVertices() < radius * radius * radius * GROWTH_FACTOR) {
+        ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
+        p.limit(radius);
+        moving.addVertex(p);
+    }
+
     // wiggle
     int movingVerts = moving.getNumVertices();
     for (int i=0; i<movingVerts; ++i) {
