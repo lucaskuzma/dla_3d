@@ -1,17 +1,19 @@
 #include "ofApp.h"
 
 #define SIZE 128
+#define STEP .1
 
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
+    ofBackground(0, 0, 0);
 
     // we're going to load a ton of points into an ofMesh
-    mesh.setMode(OF_PRIMITIVE_POINTS);
+    frozen.setMode(OF_PRIMITIVE_POINTS);
+    moving.setMode(OF_PRIMITIVE_POINTS);
 
     ofVec3f p(0, 0, 0);
-    mesh.addVertex(p);
-    frozen.push_back(p);
+    frozen.addVertex(p);
 
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
@@ -22,26 +24,25 @@ void ofApp::setup(){
 void ofApp::update(){
     // spawn a point
     ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
-    moving.push_back(p);
-    mesh.addVertex(p);
+    moving.addVertex(p);
     
     //
-    int numVerts = mesh.getNumVertices();
+    int numVerts = moving.getNumVertices();
     for (int i=0; i<numVerts; ++i) {
-        ofVec3f v = mesh.getVertex(i);
+        ofVec3f v = moving.getVertex(i);
+        v += ofVec3f(ofRandom(-STEP, STEP), ofRandom(-STEP, STEP), ofRandom(-STEP, STEP));
 
-        mesh.setVertex(i, v);
+        moving.setVertex(i, v);
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ofBackgroundGradient(ofColor::gray, ofColor::black, OF_GRADIENT_CIRCULAR);
-
     cam.begin();
     ofScale(2, -2, 2); // flip the y axis and zoom in a bit
     ofRotateYDeg(90);
-    mesh.draw();
+    frozen.draw();
+    moving.draw();
     cam.end();
 }
 

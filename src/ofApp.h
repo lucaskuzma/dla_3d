@@ -3,10 +3,6 @@
 #include "ofMain.h"
 
 class ofApp : public ofBaseApp{
-    
-    vector<ofVec3f> moving;
-    vector<ofVec3f> frozen;
-
 	public:
 		void setup();
 		void update();
@@ -25,5 +21,6 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
         ofEasyCam cam;
-        ofMesh mesh;
+        ofMesh moving;
+        ofMesh frozen;
 };
