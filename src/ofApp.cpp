@@ -5,6 +5,7 @@
 #define FREEZE_THRESHOLD 10 // how close points have to be to freeze
 #define SPAWN_DISTANCE 10   // how far from bounding sphere surface we spawn
 #define GROWTH_FACTOR 0.001 // how many wiggly points to aim for, given sphere volume
+#define SIM_SPEED 100       // how many sim steps per frame
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -26,6 +27,13 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    for (int i=0; i<SIM_SPEED; i++){
+        this->updateSim();
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::updateSim(){
     // spawn a point
     float radius = boundingRadius + SPAWN_DISTANCE;
     if (moving.getNumVertices() < radius * radius * radius * GROWTH_FACTOR) {

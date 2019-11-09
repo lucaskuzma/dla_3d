@@ -14,6 +14,7 @@ class ofApp : public ofBaseApp{
 	public:
 		void setup();
 		void update();
+        void updateSim();
 		void draw();
 
 		void keyPressed(int key);
