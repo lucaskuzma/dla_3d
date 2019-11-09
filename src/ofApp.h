@@ -7,6 +7,7 @@ class ofApp : public ofBaseApp{
     ofEasyCam cam;
     ofMesh moving;
     ofMesh frozen;
+    ofMesh ignore;
     
     vector<int> freezeList;
     float boundingRadius;

@@ -2,11 +2,16 @@
 
 #define SIZE 4096   // make this always bigger than bounding sphere
 #define STEP 0.9    // wiggle step
-#define FREEZE_THRESHOLD 4 // how close points have to be to freeze
-#define SPAWN_DISTANCE 2   // how far from bounding sphere surface we spawn
+#define FREEZE_THRESHOLD 2 // how close points have to be to freeze
+#define SPAWN_DISTANCE 2   // how far out from bounding sphere surface we spawn
+#define IGNORE_DISTANCE 4  // how far in from bounding sphere surface we ignore
 #define GROWTH_FACTOR 0.01 // how many wiggly points to aim for, given sphere volume
 #define MAX_MOVING 100     // how many moving particles at most
 #define SIM_SPEED 200      // how many sim steps per frame
+
+#define FROZEN_COLOR 1.0, 0.5, 0.5
+#define MOVING_COLOR 0.5, 0.1, 0.1
+#define IGNORE_COLOR 1.0, 1.0, 1.0
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -15,10 +20,11 @@ void ofApp::setup(){
 
     frozen.setMode(OF_PRIMITIVE_POINTS);
     moving.setMode(OF_PRIMITIVE_POINTS);
+    ignore.setMode(OF_PRIMITIVE_POINTS);
 
     ofVec3f p(0, 0, 0);
     frozen.addVertex(p);
-    frozen.addColor(ofFloatColor(1.0, 1.0, 1.0));
+    frozen.addColor(ofFloatColor(FROZEN_COLOR));
     boundingRadius = 0;
     
     runSim = true;
@@ -44,7 +50,7 @@ void ofApp::updateSim(){
         && moving.getNumVertices() < MAX_MOVING) {
         ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
         moving.addVertex(p);
-        moving.addColor(ofFloatColor(0.3, 0.3, 0.3));
+        moving.addColor(ofFloatColor(MOVING_COLOR));
     }
 
     // wiggle
@@ -74,12 +80,22 @@ void ofApp::updateSim(){
         ofVec3f v = moving.getVertex(i);
         moving.removeVertex(i);
         frozen.addVertex(v);
-        frozen.addColor(ofFloatColor(1.0, 1.0, 1.0));
+        frozen.addColor(ofFloatColor(FROZEN_COLOR));
         freezeList.pop_back();
         
         // adjust bounds
         if (v.length() > boundingRadius) {
             boundingRadius = v.length();
+        }
+    }
+    
+    // move central points to an ignore mesh
+    int frozenVerts = frozen.getNumVertices();
+    for (int j=0; j<frozenVerts; ++j) {
+        ofVec3f f = frozen.getVertex(j);
+        if (f.length() < boundingRadius - IGNORE_DISTANCE) {
+            frozen.removeVertex(j);
+            ignore.addVertex(f);
         }
     }
 }
@@ -91,6 +107,7 @@ void ofApp::draw(){
     ofRotateYDeg(ofGetElapsedTimef() * 5.0);
     frozen.draw();
     moving.draw();
+    ignore.draw();
     cam.end();
     
     ofDrawBitmapString(ofToString(frozen.getNumVertices()) + " " + ofToString(moving.getNumVertices()), 10, 20);
@@ -102,7 +119,7 @@ void ofApp::keyPressed(int key){
         runSim = !runSim;
     }
     if (key == 's') {
-        frozen.save("mesh.ply");
+        ignore.save("mesh.ply");
     }
 }
 
