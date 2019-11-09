@@ -68,7 +68,7 @@ void ofApp::update(){
 void ofApp::draw(){
     cam.begin();
     ofScale(2, -2, 2); // flip the y axis and zoom in a bit
-    ofRotateYDeg(90);
+    ofRotateYDeg(ofGetElapsedTimef() * 5.0);
     frozen.draw();
     moving.draw();
     cam.end();
