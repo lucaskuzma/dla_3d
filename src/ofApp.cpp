@@ -1,7 +1,7 @@
 #include "ofApp.h"
 
-#define SIZE 4096   // make this always bigger than bounding sphere
-#define STEP 0.9    // wiggle step
+#define SIZE 4096          // make this always bigger than bounding sphere
+#define STEP 0.9           // wiggle step
 #define FREEZE_THRESHOLD 2 // how close points have to be to freeze
 #define SPAWN_DISTANCE 2   // how far out from bounding sphere surface we spawn
 #define IGNORE_DISTANCE 4  // how far in from bounding sphere surface we ignore
