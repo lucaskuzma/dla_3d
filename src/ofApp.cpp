@@ -8,7 +8,7 @@
 #define GROWTH_FACTOR 0.01 // how many wiggly points to aim for, given sphere volume
 #define MAX_MOVING 200     // how many moving particles at most
 #define SIM_SPEED 500      // how many sim steps per frame
-#define SAVE_FRAMES false   // write frames to file
+#define SAVE_FRAMES 0      // how many frames to file
 
 #define FROZEN_COLOR 1.0, 0.1, 0.1
 #define MOVING_COLOR 0.6, 0.3, 0.3
@@ -42,10 +42,11 @@ void ofApp::update(){
         this->updateSim();
     }
 
-    if (SAVE_FRAMES){
+    int frame = ofGetFrameNum();
+    if (SAVE_FRAMES > frame){
         string zeroes = "0000";
-        zeroes = zeroes.substr(0, zeroes.length()-(ofToString(ofGetFrameNum()).length()));
-        string fileName = "./frames/f" + zeroes + ofToString(ofGetFrameNum()) + ".png";
+        zeroes = zeroes.substr(0, zeroes.length()-(ofToString(frame).length()));
+        string fileName = "./frames/b/" + zeroes + ofToString(frame) + ".png";
         ofSaveScreen(fileName);
     }
 }
