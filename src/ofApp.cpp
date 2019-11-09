@@ -2,7 +2,8 @@
 
 #define SIZE 128
 #define STEP .1
-#define THRESH 30
+#define FREEZE_THRESHOLD 10
+#define SPAWN_DISTANCE 10
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -16,6 +17,7 @@ void ofApp::setup(){
     ofVec3f p(0, 0, 0);
     frozen.addVertex(p);
     frozen.addColor(ofFloatColor(1.0, 0.0, 0.0));
+    boundingRadius = 0;
 
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
@@ -26,6 +28,7 @@ void ofApp::setup(){
 void ofApp::update(){
     // spawn a point
     ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
+    p.limit(boundingRadius + SPAWN_DISTANCE);
     moving.addVertex(p);
     
     // wiggle
@@ -38,20 +41,26 @@ void ofApp::update(){
         int frozenVerts = frozen.getNumVertices();
         for (int j=0; j<frozenVerts; ++j) {
             ofVec3f f = frozen.getVertex(j);
-            if (f.distance(v) < THRESH) {
-                addList.push_back(i);
+            if (f.distance(v) < FREEZE_THRESHOLD) {
+                freezeList.push_back(i);
             }
         }
     }
     
-    while (!addList.empty())
+    while (!freezeList.empty())
     {
-        int i = addList.back();
+        // freeze point
+        int i = freezeList.back();
         ofVec3f v = moving.getVertex(i);
         moving.removeVertex(i);
         frozen.addVertex(v);
         frozen.addColor(ofFloatColor(1.0, 0.0, 0.0));
-        addList.pop_back();
+        freezeList.pop_back();
+        
+        // adjust bounds
+        if (v.length() > boundingRadius) {
+            boundingRadius = v.length();
+        }
     }
 }
 

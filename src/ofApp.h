@@ -3,6 +3,14 @@
 #include "ofMain.h"
 
 class ofApp : public ofBaseApp{
+
+    ofEasyCam cam;
+    ofMesh moving;
+    ofMesh frozen;
+    
+    vector<int> freezeList;
+    float boundingRadius;
+    
 	public:
 		void setup();
 		void update();
@@ -19,10 +27,4 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
-        ofEasyCam cam;
-        ofMesh moving;
-        ofMesh frozen;
-        
-        vector<int> addList;
 };
