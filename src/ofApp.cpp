@@ -8,7 +8,7 @@
 #define GROWTH_FACTOR 0.01 // how many wiggly points to aim for, given sphere volume
 #define MAX_MOVING 200     // how many moving particles at most
 #define SIM_SPEED 500      // how many sim steps per frame
-#define SAVE_FRAMES true   // write frames to file
+#define SAVE_FRAMES false   // write frames to file
 
 #define FROZEN_COLOR 1.0, 0.1, 0.1
 #define MOVING_COLOR 0.6, 0.3, 0.3
