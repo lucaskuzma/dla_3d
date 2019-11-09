@@ -10,6 +10,7 @@ class ofApp : public ofBaseApp{
     ofMesh ignore;
     
     vector<int> freezeList;
+    vector<int> ignoreList;
     float boundingRadius;
     
     bool runSim;

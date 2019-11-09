@@ -6,11 +6,11 @@
 #define SPAWN_DISTANCE 2   // how far out from bounding sphere surface we spawn
 #define IGNORE_DISTANCE 4  // how far in from bounding sphere surface we ignore
 #define GROWTH_FACTOR 0.01 // how many wiggly points to aim for, given sphere volume
-#define MAX_MOVING 100     // how many moving particles at most
+#define MAX_MOVING 200     // how many moving particles at most
 #define SIM_SPEED 200      // how many sim steps per frame
 
-#define FROZEN_COLOR 1.0, 0.5, 0.5
-#define MOVING_COLOR 0.5, 0.1, 0.1
+#define FROZEN_COLOR 1.0, 0.1, 0.1
+#define MOVING_COLOR 0.6, 0.3, 0.3
 #define IGNORE_COLOR 1.0, 1.0, 1.0
 
 //--------------------------------------------------------------
@@ -89,14 +89,25 @@ void ofApp::updateSim(){
         }
     }
     
-    // move central points to an ignore mesh
+    // gather central points
     int frozenVerts = frozen.getNumVertices();
     for (int j=0; j<frozenVerts; ++j) {
         ofVec3f f = frozen.getVertex(j);
         if (f.length() < boundingRadius - IGNORE_DISTANCE) {
-            frozen.removeVertex(j);
-            ignore.addVertex(f);
+            ignoreList.push_back(j);
         }
+    }
+    
+    // move central points to an ignore mesh
+    while (!ignoreList.empty())
+    {
+        // ignore point
+        int i = ignoreList.back();
+        ofVec3f v = frozen.getVertex(i);
+        frozen.removeVertex(i);
+        ignore.addVertex(v);
+        ignore.addColor(ofFloatColor(IGNORE_COLOR));
+        ignoreList.pop_back();
     }
 }
 
