@@ -23,4 +23,6 @@ class ofApp : public ofBaseApp{
         ofEasyCam cam;
         ofMesh moving;
         ofMesh frozen;
+        
+        vector<int> addList;
 };
