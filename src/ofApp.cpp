@@ -10,7 +10,6 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     ofBackground(0, 0, 0);
 
-    // we're going to load a ton of points into an ofMesh
     frozen.setMode(OF_PRIMITIVE_POINTS);
     moving.setMode(OF_PRIMITIVE_POINTS);
 
@@ -20,8 +19,8 @@ void ofApp::setup(){
     boundingRadius = 0;
 
     ofEnableDepthTest();
-    glEnable(GL_POINT_SMOOTH); // use circular points instead of square points
-    glPointSize(3); // make the points bigger
+    glEnable(GL_POINT_SMOOTH);
+    glPointSize(1);
 }
 
 //--------------------------------------------------------------
@@ -38,6 +37,7 @@ void ofApp::update(){
         v += ofVec3f(ofRandom(-STEP, STEP), ofRandom(-STEP, STEP), ofRandom(-STEP, STEP));
         moving.setVertex(i, v);
         
+        // find near points
         int frozenVerts = frozen.getNumVertices();
         for (int j=0; j<frozenVerts; ++j) {
             ofVec3f f = frozen.getVertex(j);
@@ -47,6 +47,7 @@ void ofApp::update(){
         }
     }
     
+    // freeze near points
     while (!freezeList.empty())
     {
         // freeze point
