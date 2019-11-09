@@ -2,9 +2,9 @@
 
 #define SIZE 4096   // make this always bigger than bounding sphere
 #define STEP 0.1    // wiggle step
-#define FREEZE_THRESHOLD 10 // how close points have to be to freeze
-#define SPAWN_DISTANCE 10   // how far from bounding sphere surface we spawn
-#define GROWTH_FACTOR 0.001 // how many wiggly points to aim for, given sphere volume
+#define FREEZE_THRESHOLD 2 // how close points have to be to freeze
+#define SPAWN_DISTANCE 2   // how far from bounding sphere surface we spawn
+#define GROWTH_FACTOR 0.01 // how many wiggly points to aim for, given sphere volume
 #define SIM_SPEED 100       // how many sim steps per frame
 
 //--------------------------------------------------------------
@@ -22,7 +22,7 @@ void ofApp::setup(){
 
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(3);
+    glPointSize(1);
 }
 
 //--------------------------------------------------------------
@@ -85,6 +85,8 @@ void ofApp::draw(){
     frozen.draw();
     moving.draw();
     cam.end();
+    
+    ofDrawBitmapString(ofToString(frozen.getNumVertices()) + " " + ofToString(moving.getNumVertices()), 10, 20);
 }
 
 //--------------------------------------------------------------
