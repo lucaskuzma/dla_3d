@@ -7,7 +7,8 @@
 #define IGNORE_DISTANCE 4  // how far in from bounding sphere surface we ignore
 #define GROWTH_FACTOR 0.01 // how many wiggly points to aim for, given sphere volume
 #define MAX_MOVING 200     // how many moving particles at most
-#define SIM_SPEED 200      // how many sim steps per frame
+#define SIM_SPEED 500      // how many sim steps per frame
+#define SAVE_FRAMES true   // write frames to file
 
 #define FROZEN_COLOR 1.0, 0.1, 0.1
 #define MOVING_COLOR 0.6, 0.3, 0.3
@@ -39,6 +40,13 @@ void ofApp::update(){
     // update multiple time steps per frame
     for (int i=0; i<SIM_SPEED && runSim; i++){
         this->updateSim();
+    }
+
+    if (SAVE_FRAMES){
+        string zeroes = "0000";
+        zeroes = zeroes.substr(0, zeroes.length()-(ofToString(ofGetFrameNum()).length()));
+        string fileName = "./frames/f" + zeroes + ofToString(ofGetFrameNum()) + ".png";
+        ofSaveScreen(fileName);
     }
 }
 
