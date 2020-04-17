@@ -45,6 +45,7 @@ void ofApp::update()
         this->updateSim();
     }
     
+    // consider saving some frames
     int frame = ofGetFrameNum();
     if (SAVE_FRAMES > frame)
     {
@@ -61,7 +62,8 @@ void ofApp::updateSim()
     // spawn a point
     float spawnRadius = boundingRadius + SPAWN_DISTANCE;
     if (moving.getNumVertices() < spawnRadius * spawnRadius * spawnRadius * GROWTH_FACTOR
-        && moving.getNumVertices() < MAX_MOVING) {
+        && moving.getNumVertices() < MAX_MOVING)
+    {
         ofVec3f p(ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE), ofRandom(-SIZE, SIZE));
         moving.addVertex(p);
         moving.addColor(ofFloatColor(MOVING_COLOR));
@@ -69,7 +71,8 @@ void ofApp::updateSim()
     
     // wiggle
     int movingVerts = moving.getNumVertices();
-    for (int i=0; i<movingVerts; ++i) {
+    for (int i=0; i<movingVerts; ++i)
+    {
         ofVec3f v = moving.getVertex(i);
         v += ofVec3f(ofRandom(-STEP, STEP), ofRandom(-STEP, STEP), ofRandom(-STEP, STEP));
         v.limit(spawnRadius);
@@ -77,9 +80,11 @@ void ofApp::updateSim()
         
         // find near points
         int frozenVerts = frozen.getNumVertices();
-        for (int j=0; j<frozenVerts; ++j) {
+        for (int j=0; j<frozenVerts; ++j)
+        {
             ofVec3f f = frozen.getVertex(j);
-            if (f.squareDistance(v) < FREEZE_THRESHOLD) {
+            if (f.squareDistance(v) < FREEZE_THRESHOLD)
+            {
                 freezeList.push_back(i);
                 break;
             }
@@ -98,16 +103,19 @@ void ofApp::updateSim()
         freezeList.pop_back();
         
         // adjust bounds
-        if (v.length() > boundingRadius) {
+        if (v.length() > boundingRadius)
+        {
             boundingRadius = v.length();
         }
     }
     
     // gather central points
     int frozenVerts = frozen.getNumVertices();
-    for (int j=0; j<frozenVerts; ++j) {
+    for (int j=0; j<frozenVerts; ++j)
+    {
         ofVec3f f = frozen.getVertex(j);
-        if (f.length() < boundingRadius - IGNORE_DISTANCE) {
+        if (f.length() < boundingRadius - IGNORE_DISTANCE)
+        {
             ignoreList.push_back(j);
         }
     }
@@ -146,7 +154,8 @@ void ofApp::keyPressed(int key)
     {
         runSim = !runSim;
     }
-    if (key == 's') {
+    if (key == 's')
+    {
         ignore.save("mesh.ply");
     }
 }
