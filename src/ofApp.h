@@ -20,6 +20,7 @@ class ofApp : public ofBaseApp{
 		void update();
         void updateSim();
 		void draw();
+        void rebirth();
 
 		void keyPressed(int key);
 		void keyReleased(int key);

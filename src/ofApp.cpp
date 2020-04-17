@@ -4,14 +4,14 @@
 #define STEP 0.9           // wiggle step
 #define FREEZE_THRESHOLD 2 // how close points have to be to freeze
 #define SPAWN_DISTANCE 2   // how far out from bounding sphere surface we spawn
-#define IGNORE_DISTANCE 4  // how far in from bounding sphere surface we ignore
+#define IGNORE_DISTANCE 8  // how far in from bounding sphere surface we ignore
 #define GROWTH_FACTOR 0.01 // how many wiggly points to aim for, given sphere volume
 #define MAX_MOVING 200     // how many moving particles at most
 #define SIM_SPEED 500      // how many sim steps per frame
 #define SAVE_FRAMES 0      // how many frames to file
 
 #define FROZEN_COLOR 1.0, 0.1, 0.1
-#define MOVING_COLOR 0.6, 0.3, 0.3
+#define MOVING_COLOR 0.3, 0.3, 0.7
 #define IGNORE_COLOR 1.0, 1.0, 1.0
 
 //--------------------------------------------------------------
@@ -148,6 +148,12 @@ void ofApp::draw()
 }
 
 //--------------------------------------------------------------
+void ofApp::rebirth()
+{
+    boundingRadius = boundingRadius - IGNORE_DISTANCE;
+}
+
+//--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
     if (key == ' ')
@@ -157,6 +163,10 @@ void ofApp::keyPressed(int key)
     if (key == 's')
     {
         ignore.save("mesh.ply");
+    }
+    if (key == 'r')
+    {
+        rebirth();
     }
 }
 
