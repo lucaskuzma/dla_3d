@@ -15,35 +15,39 @@
 #define IGNORE_COLOR 1.0, 1.0, 1.0
 
 //--------------------------------------------------------------
-void ofApp::setup(){
+void ofApp::setup()
+{
     ofSetVerticalSync(true);
     ofBackground(0, 0, 0);
-
+    
     frozen.setMode(OF_PRIMITIVE_POINTS);
     moving.setMode(OF_PRIMITIVE_POINTS);
     ignore.setMode(OF_PRIMITIVE_POINTS);
-
+    
     ofVec3f p(0, 0, 0);
     frozen.addVertex(p);
     frozen.addColor(ofFloatColor(FROZEN_COLOR));
     boundingRadius = 0;
     
     runSim = true;
-
+    
     ofEnableDepthTest();
     glEnable(GL_POINT_SMOOTH);
     glPointSize(2);
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update()
+{
     // update multiple time steps per frame
-    for (int i=0; i<SIM_SPEED && runSim; i++){
+    for (int i=0; i<SIM_SPEED && runSim; i++)
+    {
         this->updateSim();
     }
-
+    
     int frame = ofGetFrameNum();
-    if (SAVE_FRAMES > frame){
+    if (SAVE_FRAMES > frame)
+    {
         string zeroes = "0000";
         zeroes = zeroes.substr(0, zeroes.length()-(ofToString(frame).length()));
         string fileName = "./frames/b/" + zeroes + ofToString(frame) + ".png";
@@ -52,7 +56,8 @@ void ofApp::update(){
 }
 
 //--------------------------------------------------------------
-void ofApp::updateSim(){
+void ofApp::updateSim()
+{
     // spawn a point
     float spawnRadius = boundingRadius + SPAWN_DISTANCE;
     if (moving.getNumVertices() < spawnRadius * spawnRadius * spawnRadius * GROWTH_FACTOR
@@ -61,7 +66,7 @@ void ofApp::updateSim(){
         moving.addVertex(p);
         moving.addColor(ofFloatColor(MOVING_COLOR));
     }
-
+    
     // wiggle
     int movingVerts = moving.getNumVertices();
     for (int i=0; i<movingVerts; ++i) {
@@ -121,7 +126,8 @@ void ofApp::updateSim(){
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
+void ofApp::draw()
+{
     cam.begin();
     ofScale(2, -2, 2); // flip the y axis and zoom in a bit
     ofRotateYDeg(ofGetElapsedTimef() * 5.0);
@@ -134,8 +140,10 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-    if (key == ' '){
+void ofApp::keyPressed(int key)
+{
+    if (key == ' ')
+    {
         runSim = !runSim;
     }
     if (key == 's') {
@@ -144,51 +152,61 @@ void ofApp::keyPressed(int key){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
+void ofApp::keyReleased(int key)
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
+void ofApp::mouseMoved(int x, int y )
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
+void ofApp::mouseDragged(int x, int y, int button)
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
+void ofApp::mousePressed(int x, int y, int button)
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
+void ofApp::mouseReleased(int x, int y, int button)
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
+void ofApp::mouseEntered(int x, int y)
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
+void ofApp::mouseExited(int x, int y)
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
+void ofApp::windowResized(int w, int h)
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
+void ofApp::gotMessage(ofMessage msg)
+{
+    
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+void ofApp::dragEvent(ofDragInfo dragInfo)
+{
+    
 }
