@@ -144,7 +144,7 @@ void ofApp::draw()
     ignore.draw();
     cam.end();
     
-    ofDrawBitmapString(ofToString(frozen.getNumVertices()) + " " + ofToString(moving.getNumVertices()), 10, 20);
+    ofDrawBitmapString(ofToString(frozen.getNumVertices()) + " " + ofToString(moving.getNumVertices())+ " " + ofToString(ignore.getNumVertices()), 10, 20);
 }
 
 //--------------------------------------------------------------
